@@ -1,51 +1,439 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Add Customer</title>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Add Customer - Car Rental</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111827;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 21px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        .menu-title {
+            color: #9ca3af;
+            font-size: 12px;
+            margin: 22px 10px 10px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #d1d5db;
+            padding: 13px 15px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* ================= MAIN ================= */
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .top {
+            margin-bottom: 25px;
+        }
+
+        .top h1 {
+            color: #111827;
+            font-size: 30px;
+        }
+
+        .top p {
+            color: #6b7280;
+            margin-top: 7px;
+        }
+
+        /* ================= FORM CARD ================= */
+
+        .form-card {
+            max-width: 700px;
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-card h2 {
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .form-card .subtitle {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            color: #374151;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        .account-title {
+            margin-top: 25px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #e5e7eb;
+            color: #374151;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #d1d5db;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media(max-width: 700px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+
 </head>
+
 
 <body>
 
-<h2>Add New Customer</h2>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        🚗 <span>CAR RENTAL</span>
+    </div>
 
 
-<form action="/savecustomer" method="post">
+    <a href="/dashboard">
+        🏠 Dashboard
+    </a>
 
 
-    Name <br>
-    <input type="text" name="name">
-    <br><br>
+    <div class="menu-title">
+        Cars
+    </div>
 
 
-    Phone <br>
-    <input type="text" name="phone">
-    <br><br>
+    <a href="/addcar">
+        ➕ Add Car
+    </a>
+
+    <a href="/viewcars">
+        🚘 View Cars
+    </a>
+
+    <a href="/searchcar">
+        🔍 Search Car
+    </a>
+
+    <a href="/updatecar">
+        ✏️ Update Car
+    </a>
+
+    <a href="/deletecar">
+        🗑️ Delete Car
+    </a>
 
 
-    Email <br>
-    <input type="email" name="email" placeholder="Optional">
-    <br><br>
+    <div class="menu-title">
+        Customers
+    </div>
 
 
-    License Number <br>
-    <input type="text" name="license">
-    <br><br>
+    <a href="/addcustomer"
+       class="active">
+        ➕ Add Customer
+    </a>
+
+    <a href="/viewcustomers">
+        👥 View Customers
+    </a>
 
 
-    <button type="submit">
-        Add Customer
-    </button>
+    <div class="menu-title">
+        Rentals
+    </div>
 
 
-</form>
+    <a href="/rentcar">
+        🚗 Rent Car
+    </a>
+
+    <a href="/viewrentals">
+        📋 View Rentals
+    </a>
+
+    <a href="/returncar">
+        🔄 Return Car
+    </a>
+
+    <a href="/receipt?rentalId=1">
+        🧾 Receipt
+    </a>
 
 
-<br>
+    <a href="/">
+        🚪 Logout
+    </a>
 
-<a href="/dashboard">
-Back
-</a>
+</div>
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="main">
+
+
+    <div class="top">
+
+        <h1>
+            👤 Add Customer
+        </h1>
+
+        <p>
+            Create a customer account for car rental
+        </p>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+        <h2>
+            Customer Registration
+        </h2>
+
+        <p class="subtitle">
+            Enter customer personal and login details
+        </p>
+
+
+        <form action="/savecustomer"
+              method="post">
+
+
+            <!-- CUSTOMER DETAILS -->
+
+            <div class="form-group">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input type="text"
+                       name="name"
+                       placeholder="Enter customer name"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Phone Number
+                </label>
+
+                <input type="text"
+                       name="phone"
+                       placeholder="Enter phone number"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Email
+                </label>
+
+                <input type="email"
+                       name="email"
+                       placeholder="Enter email address"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Driving License
+                </label>
+
+                <input type="text"
+                       name="license"
+                       placeholder="Enter driving license number"
+                       required>
+
+            </div>
+
+
+            <!-- LOGIN DETAILS -->
+
+            <h3 class="account-title">
+                🔐 Customer Login Details
+            </h3>
+
+
+            <div class="form-group">
+
+                <label>
+                    Username
+                </label>
+
+                <input type="text"
+                       name="username"
+                       placeholder="Create username"
+                       required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Password
+                </label>
+
+                <input type="password"
+                       name="password"
+                       placeholder="Create password"
+                       required>
+
+            </div>
+
+
+            <!-- SAVE -->
+
+            <button type="submit"
+                    class="save-btn">
+
+                Create Customer Account
+
+            </button>
+
+
+        </form>
+
+
+        <a href="/dashboard"
+           class="back-btn">
+
+            ← Back to Dashboard
+
+        </a>
+
+    </div>
+
+</div>
 
 
 </body>

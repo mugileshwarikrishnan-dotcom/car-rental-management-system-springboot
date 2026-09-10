@@ -1,6 +1,5 @@
 package com.carrental.controller;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,25 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import com.carrental.model.Car;
 import com.carrental.model.Customer;
+import com.carrental.model.Rental;
 
 import com.carrental.service.CarService;
 import com.carrental.service.CustomerService;
-
-import com.carrental.model.Rental;
 import com.carrental.service.RentalService;
 
-
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class HomeController {
 
-
     @Autowired
     private CarService carService;
-
 
     @Autowired
     private CustomerService customerService;
@@ -35,300 +30,523 @@ public class HomeController {
     private RentalService rentalService;
 
 
+    // =====================================================
+    // LOGIN PAGE
+    // =====================================================
 
-
-    // Login Page
     @GetMapping("/")
     public String home() {
-
         return "login";
-
     }
 
 
+    // =====================================================
+    // LOGIN
+    // =====================================================
 
-    // Login Check
     @PostMapping("/login")
     public String login(@RequestParam String username,
-                        @RequestParam String password) {
+                        @RequestParam String password,
+                        HttpSession session) {
 
+        // ADMIN LOGIN
+        if (username.equals("admin") && password.equals("admin123")) {
 
-        if(username.equals("admin") && password.equals("admin123")) {
+            session.setAttribute("role", "ADMIN");
 
-            return "dashboard";
-
-        }
-        else {
-
-            return "login";
-
+            return "redirect:/dashboard";
         }
 
+        // CUSTOMER LOGIN
+        Customer customer = customerService.login(username, password);
+
+        if (customer != null) {
+
+            session.setAttribute("role", "CUSTOMER");
+            session.setAttribute("customerId", customer.getId());
+            session.setAttribute("customerName", customer.getName());
+
+            return "redirect:/customerhome";
+        }
+
+        // INVALID LOGIN
+        return "redirect:/";
     }
 
 
+    // =====================================================
+    // ADMIN DASHBOARD
+    // =====================================================
 
-    // Dashboard
     @GetMapping("/dashboard")
-    public String dashboard() {
+    public String dashboard(HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
 
         return "dashboard";
-
     }
 
 
+    // =====================================================
+    // CUSTOMER HOME
+    // =====================================================
 
-    // Add Car Page
+    @GetMapping("/customerhome")
+    public String customerHome(Model model,
+                               HttpSession session) {
+
+        if (!isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        model.addAttribute(
+                "cars",
+                carService.getAllCars()
+        );
+
+        return "customerhome";
+    }
+
+
+    // =====================================================
+    // ADD CAR
+    // ADMIN ONLY
+    // =====================================================
+
     @GetMapping("/addcar")
-    public String addCarPage() {
+    public String addCarPage(HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
 
         return "addcar";
-
     }
 
 
-
-    // Save Car
+    // SAVE CAR
     @PostMapping("/savecar")
     public String saveCar(@RequestParam String brand,
                           @RequestParam String model,
-                          @RequestParam double pricePerDay) {
+                          @RequestParam double pricePerDay,
+                          HttpSession session) {
 
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
 
         Car car = new Car();
 
-
         car.setBrand(brand);
         car.setModel(model);
         car.setPricePerDay(pricePerDay);
-
 
         carService.saveCar(car);
 
-
         return "redirect:/dashboard";
-
     }
 
 
+    // =====================================================
+    // VIEW CARS
+    // ADMIN / CUSTOMER
+    // =====================================================
 
-
-    // View Cars
     @GetMapping("/viewcars")
-    public String viewCars(Model model) {
-    model.addAttribute("cars", carService.getAllCars());
-    return "viewcars";
-}
+    public String viewCars(Model model,
+                           HttpSession session) {
 
-    
-    // Delete Car Page
-    @GetMapping("/deletecar")
-    public String deleteCarPage() {
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
 
-    return "deletecar";
+        model.addAttribute(
+                "cars",
+                carService.getAllCars()
+        );
 
-}
-
-// Delete Car
-    @PostMapping("/deletecar")
-public String deleteCar(@RequestParam int carId, Model model) {
-
-    carService.deleteCar(carId);
-
-    model.addAttribute("message", "Car Deleted Successfully!");
-
-    model.addAttribute("cars", carService.getAllCars());
-
-    return "viewcars";
-
-}
-    // Search Car Page
-@GetMapping("/searchcar")
-public String searchCarPage() {
-
-    return "searchcar";
-
-}
-    // Search Car
-    @PostMapping("/searchcar")
-public String searchCar(@RequestParam String brand, Model model) {
-
-    model.addAttribute("cars", carService.searchCars(brand));
-
-    return "viewcars";
-
-}
-    // Update Car Page
-@GetMapping("/updatecar")
-public String updateCarPage() {
-
-    return "updatecar";
-
-}
-
-// Update Car
-@PostMapping("/updatecar")
-public String updateCar(@RequestParam int id,
-                        @RequestParam String brand,
-                        @RequestParam String model,
-                        @RequestParam double pricePerDay,
-                        Model modelObj) {
-
-    Car car = carService.getCarById(id);
-
-    if (car != null) {
-
-        car.setBrand(brand);
-        car.setModel(model);
-        car.setPricePerDay(pricePerDay);
-
-        carService.updateCar(car);
-
-        modelObj.addAttribute("message", "Car Updated Successfully!");
+        return "viewcars";
     }
 
-    modelObj.addAttribute("cars", carService.getAllCars());
 
-    return "viewcars";
-}
+    // =====================================================
+    // DELETE CAR
+    // ADMIN ONLY
+    // =====================================================
 
-    // Add Customer Page
+    @GetMapping("/deletecar")
+    public String deleteCarPage(HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        return "deletecar";
+    }
+
+
+    @PostMapping("/deletecar")
+    public String deleteCar(@RequestParam int carId,
+                            Model model,
+                            HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        carService.deleteCar(carId);
+
+        model.addAttribute(
+                "message",
+                "Car Deleted Successfully!"
+        );
+
+        model.addAttribute(
+                "cars",
+                carService.getAllCars()
+        );
+
+        return "viewcars";
+    }
+
+
+    // =====================================================
+    // SEARCH CAR
+    // ADMIN / CUSTOMER
+    // =====================================================
+
+    @GetMapping("/searchcar")
+    public String searchCarPage(HttpSession session) {
+
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        return "searchcar";
+    }
+
+
+    @PostMapping("/searchcar")
+    public String searchCar(@RequestParam String brand,
+                            Model model,
+                            HttpSession session) {
+
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        model.addAttribute(
+                "cars",
+                carService.searchCars(brand)
+        );
+
+        return "viewcars";
+    }
+
+
+    // =====================================================
+    // UPDATE CAR
+    // ADMIN ONLY
+    // =====================================================
+
+    @GetMapping("/updatecar")
+    public String updateCarPage(HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        return "updatecar";
+    }
+
+
+    @PostMapping("/updatecar")
+    public String updateCar(@RequestParam int id,
+                            @RequestParam String brand,
+                            @RequestParam String model,
+                            @RequestParam double pricePerDay,
+                            Model modelObj,
+                            HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        Car car = carService.getCarById(id);
+
+        if (car != null) {
+
+            car.setBrand(brand);
+            car.setModel(model);
+            car.setPricePerDay(pricePerDay);
+
+            carService.updateCar(car);
+
+            modelObj.addAttribute(
+                    "message",
+                    "Car Updated Successfully!"
+            );
+        }
+
+        modelObj.addAttribute(
+                "cars",
+                carService.getAllCars()
+        );
+
+        return "viewcars";
+    }
+
+
+    // =====================================================
+    // ADD CUSTOMER
+    // ADMIN ONLY
+    // =====================================================
+
     @GetMapping("/addcustomer")
-    public String addCustomerPage() {
+    public String addCustomerPage(HttpSession session) {
 
+        // Allow customer registration from login page
+        if (session.getAttribute("role") == null) {
+            return "addcustomer";
+        }
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
 
         return "addcustomer";
-
     }
 
 
-
-
-    // Save Customer
+    // SAVE CUSTOMER
     @PostMapping("/savecustomer")
     public String saveCustomer(@RequestParam String name,
                                @RequestParam String phone,
                                @RequestParam String email,
-                               @RequestParam String license) {
-
-
+                               @RequestParam String license,
+                               @RequestParam String username,
+                               @RequestParam String password) {
 
         Customer customer = new Customer();
-
 
         customer.setName(name);
         customer.setPhone(phone);
         customer.setEmail(email);
         customer.setLicense(license);
-
-
+        customer.setUsername(username);
+        customer.setPassword(password);
 
         customerService.saveCustomer(customer);
 
+        return "redirect:/";
+    }
 
+
+    // =====================================================
+    // VIEW CUSTOMERS
+    // ADMIN ONLY
+    // =====================================================
+
+    @GetMapping("/viewcustomers")
+    public String viewCustomers(Model model,
+                                HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        model.addAttribute(
+                "customers",
+                customerService.getAllCustomers()
+        );
+
+        return "viewcustomers";
+    }
+
+
+    // =====================================================
+    // RENT CAR
+    // ADMIN / CUSTOMER
+    // =====================================================
+
+    @GetMapping("/rentcar")
+    public String rentCarPage(HttpSession session) {
+
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        return "rentcar";
+    }
+
+
+    // SAVE RENTAL
+    @PostMapping("/saverental")
+    public String saveRental(@RequestParam int customerId,
+                             @RequestParam int carId,
+                             @RequestParam int days,
+                             HttpSession session) {
+
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        Rental rental = new Rental();
+
+        rental.setCustomerId(customerId);
+        rental.setCarId(carId);
+        rental.setDays(days);
+
+        double amount = days * 2500;
+
+        rental.setTotalAmount(amount);
+        rental.setStatus("RENTED");
+
+        rental.setRentDate(
+                java.time.LocalDate.now().toString()
+        );
+
+        rentalService.saveRental(rental);
+
+        carService.updateCarStatus(
+                carId,
+                "RENTED"
+        );
+
+        if (isCustomer(session)) {
+            return "redirect:/customerhome";
+        }
 
         return "redirect:/dashboard";
-
     }
 
-@GetMapping("/viewcustomers")
-public String viewCustomers(Model model) {
 
-    model.addAttribute("customers",
-            customerService.getAllCustomers());
+    // =====================================================
+    // VIEW RENTALS
+    // ADMIN ONLY
+    // =====================================================
 
-    return "viewcustomers";
+    @GetMapping("/viewrentals")
+    public String viewRentals(Model model,
+                              HttpSession session) {
 
-}
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
 
-// Rent Car Page
-@GetMapping("/rentcar")
-public String rentCarPage() {
+        model.addAttribute(
+                "rentals",
+                rentalService.getAllRentals()
+        );
 
-    return "rentcar";
-
-}
-
-
-// Save Rental
-@PostMapping("/saverental")
-public String saveRental(@RequestParam int customerId,
-                         @RequestParam int carId,
-                         @RequestParam int days) {
-
-
-    Rental rental = new Rental();
-
-
-    rental.setCustomerId(customerId);
-
-    rental.setCarId(carId);
-
-    rental.setDays(days);
-
-
-    double amount = days * 2500;
-
-    rental.setTotalAmount(amount);
-    rental.setStatus("RENTED");
-    rental.setRentDate(java.time.LocalDate.now().toString());
-
-    rentalService.saveRental(rental);
-
-    // Update car status
-    carService.updateCarStatus(carId, "RENTED");
-
-    return "redirect:/dashboard";
-
-}
-@GetMapping("/viewrentals")
-public String viewRentals(Model model) {
-
-
-    model.addAttribute("rentals",
-            rentalService.getAllRentals());
-
-
-    return "viewrentals";
-
-}
-@GetMapping("/returncar")
-public String returnCarPage() {
-
-    return "returncar";
-
-}
-@PostMapping("/returncar")
-public String returnCar(@RequestParam int rentalId) {
-
-    Rental rental = rentalService.getRentalById(rentalId);
-
-    if (rental != null) {
-
-        // Update Rental Status
-        rental.setStatus("RETURNED");
-
-        // Update Return Date
-        rental.setReturnDate(java.time.LocalDate.now().toString());
-
-        // Save Updated Rental
-        rentalService.updateRental(rental);
-
-        // Update Car Status
-        carService.updateCarStatus(rental.getCarId(), "AVAILABLE");
+        return "viewrentals";
     }
 
-    return "redirect:/dashboard";
+
+    // =====================================================
+    // RETURN CAR
+    // ADMIN ONLY
+    // =====================================================
+
+    @GetMapping("/returncar")
+    public String returnCarPage(HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        return "returncar";
+    }
+
+
+    @PostMapping("/returncar")
+    public String returnCar(@RequestParam int rentalId,
+                            HttpSession session) {
+
+        if (!isAdmin(session)) {
+            return "redirect:/customerhome";
+        }
+
+        Rental rental =
+                rentalService.getRentalById(rentalId);
+
+        if (rental != null) {
+
+            rental.setStatus("RETURNED");
+
+            rental.setReturnDate(
+                    java.time.LocalDate.now().toString()
+            );
+
+            rentalService.updateRental(rental);
+
+            carService.updateCarStatus(
+                    rental.getCarId(),
+                    "AVAILABLE"
+            );
+        }
+
+        return "redirect:/dashboard";
+    }
+
+
+    // =====================================================
+    // RECEIPT
+    // =====================================================
+
+    @GetMapping("/receipt")
+    public String receipt(@RequestParam int rentalId,
+                          Model model,
+                          HttpSession session) {
+
+        if (!isAdmin(session) && !isCustomer(session)) {
+            return "redirect:/";
+        }
+
+        Rental rental =
+                rentalService.getRentalById(rentalId);
+
+        model.addAttribute(
+                "rental",
+                rental
+        );
+
+        return "receipt";
+    }
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+
+        session.invalidate();
+
+        return "redirect:/";
+    }
+
+
+    // =====================================================
+    // ROLE CHECK METHODS
+    // =====================================================
+
+    private boolean isAdmin(HttpSession session) {
+
+        return "ADMIN".equals(
+                session.getAttribute("role")
+        );
+    }
+
+
+    private boolean isCustomer(HttpSession session) {
+
+        return "CUSTOMER".equals(
+                session.getAttribute("role")
+        );
+    }
 
 }
-@GetMapping("/receipt")
-public String receipt(@RequestParam int rentalId, Model model) {
-
-    Rental rental = rentalService.getRentalById(rentalId);
-
-    model.addAttribute("rental", rental);
-
-    return "receipt";
-}
-}
-

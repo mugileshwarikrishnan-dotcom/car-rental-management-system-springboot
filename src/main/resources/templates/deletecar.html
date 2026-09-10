@@ -1,26 +1,289 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Delete Car</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Delete Car - Car Rental Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #172033;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 35px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #9ca8bd;
+            margin: 20px 10px 8px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #dce2ec;
+            text-decoration: none;
+            padding: 11px 14px;
+            margin: 4px 0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover {
+            background: #2d3a52;
+            color: white;
+        }
+
+        .sidebar .active {
+            background: #2d3a52;
+            color: white;
+        }
+
+        .logout {
+            margin-top: 25px !important;
+            background: #dc3545;
+            text-align: center;
+            color: white !important;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .page-header {
+            background: white;
+            padding: 22px 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .page-header h1 {
+            color: #172033;
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        .page-header p {
+            color: #6c757d;
+        }
+
+        /* Form Card */
+        .form-card {
+            max-width: 650px;
+            background: white;
+            padding: 35px;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-card h2 {
+            color: #172033;
+            margin-bottom: 10px;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #856404;
+            padding: 13px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #d6dbe3;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #172033;
+        }
+
+        .delete-btn {
+            width: 100%;
+            padding: 14px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: #bb2d3b;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 11px 22px;
+            background: #e9edf3;
+            color: #172033;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            background: #dce2ec;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .form-card {
+                padding: 25px;
+            }
+        }
+    </style>
+
 </head>
+
 <body>
 
-<h2>Delete Car</h2>
+<!-- Sidebar -->
 
-<form action="/deletecar" method="post">
+<div class="sidebar">
 
-    <label>Car ID:</label>
-    <input type="number" name="carId" required>
+    <div class="logo">
+        🚗 CAR RENTAL
+    </div>
 
-    <br><br>
+    <a href="/">🏠 Dashboard</a>
 
-    <button type="submit">Delete</button>
+    <div class="menu-title">Cars</div>
 
-</form>
+    <a href="/addcar">➕ Add Car</a>
+    <a href="/viewcars">🚘 View Cars</a>
+    <a href="/searchcar">🔍 Search Car</a>
+    <a href="/updatecar">✏️ Update Car</a>
+    <a href="/deletecar" class="active">🗑️ Delete Car</a>
 
-<br>
+    <div class="menu-title">Customers</div>
 
-<a href="/dashboard">Back to Dashboard</a>
+    <a href="/addcustomer">👤 Add Customer</a>
+    <a href="/viewcustomers">👥 View Customers</a>
+
+    <div class="menu-title">Rentals</div>
+
+    <a href="/rentcar">🔑 Rent Car</a>
+    <a href="/viewrentals">📋 View Rentals</a>
+    <a href="/returncar">↩️ Return Car</a>
+    <a href="/receipt?rentalId=4">🧾 Print Receipt</a>
+
+    <a href="/login" class="logout">🚪 Logout</a>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main">
+
+    <div class="page-header">
+        <h1>🗑️ Delete Car</h1>
+        <p>Remove a car from the rental system</p>
+    </div>
+
+
+    <div class="form-card">
+
+        <h2>Delete Car</h2>
+
+        <div class="warning">
+            ⚠️ Please make sure you enter the correct Car ID.
+            Deleted car information cannot be recovered.
+        </div>
+
+        <form action="/deletecar" method="post">
+
+            <div class="form-group">
+
+                <label>Car ID</label>
+
+                <input
+                    type="number"
+                    name="carId"
+                    placeholder="Enter Car ID"
+                    min="1"
+                    required>
+
+            </div>
+
+
+            <button type="submit" class="delete-btn">
+                🗑️ Delete Car
+            </button>
+
+        </form>
+
+
+        <a href="/" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+</div>
 
 </body>
+
 </html>

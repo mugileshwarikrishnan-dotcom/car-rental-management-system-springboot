@@ -2,40 +2,261 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Update Car</title>
+    <meta charset="UTF-8">
+    <title>Update Car - Car Rental</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #1e293b;
+            color: white;
+            min-height: 100vh;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 20px 10px 8px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 11px 12px;
+            margin: 4px 0;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #334155;
+            color: white;
+        }
+
+        .logout {
+            margin-top: 25px !important;
+            background: #dc2626;
+        }
+
+        .logout:hover {
+            background: #b91c1c !important;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 40px;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            max-width: 650px;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-card h2 {
+            color: #1e293b;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #334155;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+        }
+
+        .update-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .update-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>Update Car</h2>
+    <!-- Sidebar -->
+    <div class="sidebar">
 
-<form action="/updatecar" method="post">
+        <div class="logo">
+            🚗 CAR RENTAL
+        </div>
 
-    Car ID <br>
-    <input type="number" name="id" required>
-    <br><br>
+        <a href="/">🏠 Dashboard</a>
 
-    Brand <br>
-    <input type="text" name="brand" required>
-    <br><br>
+        <div class="menu-title">Cars</div>
 
-    Model <br>
-    <input type="text" name="model" required>
-    <br><br>
+        <a href="/addcar">➕ Add Car</a>
+        <a href="/viewcars">🚘 View Cars</a>
+        <a href="/searchcar">🔍 Search Car</a>
+        <a href="/updatecar" class="active">✏️ Update Car</a>
+        <a href="/deletecar">🗑️ Delete Car</a>
 
-    Price Per Day <br>
-    <input type="number" step="0.01" name="pricePerDay" required>
-    <br><br>
+        <div class="menu-title">Customers</div>
 
-    <button type="submit">
-        Update Car
-    </button>
+        <a href="/addcustomer">👤 Add Customer</a>
+        <a href="/viewcustomers">👥 View Customers</a>
 
-</form>
+        <div class="menu-title">Rentals</div>
 
-<br>
+        <a href="/rentcar">🔑 Rent Car</a>
+        <a href="/viewrentals">📋 View Rentals</a>
+        <a href="/returncar">↩️ Return Car</a>
+        <a href="/receipt?rentalId=4">🧾 Print Receipt</a>
 
-<a href="/dashboard">Back</a>
+        <a href="/login" class="logout">🚪 Logout</a>
+
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <div class="header">
+            <h1>✏️ Update Car</h1>
+            <p>Modify the details of an existing car</p>
+        </div>
+
+        <div class="form-card">
+
+            <h2>Car Details</h2>
+
+            <form action="/updatecar" method="post">
+
+                <div class="form-group">
+                    <label>Car ID</label>
+                    <input type="number" name="id" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Brand</label>
+                    <input type="text" name="brand" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Model</label>
+                    <input type="text" name="model" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Price Per Day</label>
+                    <input type="number"
+                           step="0.01"
+                           name="pricePerDay"
+                           required>
+                </div>
+
+                <button type="submit" class="update-btn">
+                    ✏️ Update Car
+                </button>
+
+            </form>
+
+            <a href="/" class="back-btn">← Back to Dashboard</a>
+
+        </div>
+
+    </div>
 
 </body>
 </html>

@@ -1,23 +1,318 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Car Rental - Login</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #172235;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            width: 900px;
+            min-height: 520px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+        }
+
+        /* ================= LEFT SIDE ================= */
+
+        .left-section {
+            width: 50%;
+            background: #111c2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .car-icon {
+            font-size: 65px;
+            margin-bottom: 25px;
+        }
+
+        .left-section h1 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .left-section p {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #e5e7eb;
+        }
+
+        /* ================= RIGHT SIDE ================= */
+
+        .right-section {
+            width: 50%;
+            padding: 70px 50px;
+            background: #ffffff;
+        }
+
+        .right-section h2 {
+            font-size: 30px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: #2563eb;
+        }
+
+        /* ================= LOGIN BUTTON ================= */
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* ================= REGISTER ================= */
+
+        .register {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .register a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .register a:hover {
+            text-decoration: underline;
+        }
+
+        /* ================= FOOTER ================= */
+
+        .footer {
+            text-align: center;
+            margin-top: 35px;
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 750px) {
+
+            .login-container {
+                width: 95%;
+                flex-direction: column;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+            }
+
+            .left-section {
+                padding: 35px 20px;
+            }
+
+            .right-section {
+                padding: 40px 30px;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h2>Car Rental Management System</h2>
+    <div class="login-container">
 
-<form action="/login" method="post">
+        <!-- =================================================
+             LEFT SECTION
+        ================================================== -->
 
-    <label>Username</label><br>
-    <input type="text" name="username"><br><br>
+        <div class="left-section">
 
-    <label>Password</label><br>
-    <input type="password" name="password"><br><br>
+            <div class="car-icon">
+                🚗
+            </div>
 
-    <button type="submit">Login</button>
+            <h1>
+                Car Rental
+            </h1>
 
-</form>
+            <p>
+                Easy, Fast & Reliable Car Rental Management
+            </p>
+
+            <p>
+                Manage cars, customers and rentals in one place.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             RIGHT SECTION
+        ================================================== -->
+
+        <div class="right-section">
+
+            <h2>
+                Welcome Back!
+            </h2>
+
+            <p class="subtitle">
+                Login to your account
+            </p>
+
+
+            <!-- =================================================
+                 LOGIN FORM
+            ================================================== -->
+
+            <form action="/login" method="post">
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        required>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required>
+
+                </div>
+
+
+                <!-- LOGIN BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-btn">
+
+                    Login
+
+                </button>
+
+            </form>
+
+
+            <!-- =================================================
+                 CUSTOMER REGISTRATION
+            ================================================== -->
+
+            <div class="register">
+
+                <span>
+                    New customer?
+                </span>
+
+                <a href="/addcustomer">
+                    Create Account
+                </a>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="footer">
+
+                © 2026 Car Rental Management System
+
+            </div>
+
+        </div>
+
+    </div>
 
 </body>
+
 </html>

@@ -2,64 +2,262 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rental Receipt</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f6f9;
+            color: #222;
+        }
+
+        .container {
+            width: 700px;
+            max-width: 92%;
+            margin: 50px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #172033;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header .icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 27px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            color: #cbd2df;
+        }
+
+        .receipt {
+            padding: 30px;
+        }
+
+        .receipt-title {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .receipt-title h2 {
+            margin: 0;
+            color: #172033;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+        }
+
+        th {
+            width: 40%;
+            background: #f8f9fb;
+            color: #555;
+        }
+
+        td {
+            font-weight: 600;
+        }
+
+        .amount {
+            font-size: 20px;
+            color: #172033;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .print-btn {
+            background: #172033;
+            color: white;
+        }
+
+        .dashboard-btn {
+            background: #e9edf3;
+            color: #172033;
+        }
+
+        .btn:hover {
+            opacity: 0.85;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 18px;
+            background: #f8f9fb;
+            color: #777;
+            font-size: 13px;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            .buttons {
+                display: none;
+            }
+
+            .footer {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 20px auto;
+            }
+
+            .receipt {
+                padding: 20px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h2>Rental Receipt</h2>
+<div class="container">
 
-<table border="1" cellpadding="10">
+    <!-- Header -->
+    <div class="header">
+        <div class="icon">🚗</div>
+        <h1>Car Rental Management System</h1>
+        <p>Rental Receipt</p>
+    </div>
 
-<tr>
-    <th>Rental ID</th>
-    <td th:text="${rental.id}"></td>
-</tr>
+    <!-- Receipt -->
+    <div class="receipt">
 
-<tr>
-    <th>Customer ID</th>
-    <td th:text="${rental.customerId}"></td>
-</tr>
+        <div class="receipt-title">
+            <h2>🧾 Rental Receipt</h2>
+        </div>
 
-<tr>
-    <th>Car ID</th>
-    <td th:text="${rental.carId}"></td>
-</tr>
+        <table>
 
-<tr>
-    <th>Days</th>
-    <td th:text="${rental.days}"></td>
-</tr>
+            <tr>
+                <th>Rental ID</th>
+                <td th:text="${rental.id}"></td>
+            </tr>
 
-<tr>
-    <th>Total Amount</th>
-    <td th:text="${rental.totalAmount}"></td>
-</tr>
+            <tr>
+                <th>Customer ID</th>
+                <td th:text="${rental.customerId}"></td>
+            </tr>
 
-<tr>
-    <th>Status</th>
-    <td th:text="${rental.status}"></td>
-</tr>
+            <tr>
+                <th>Car ID</th>
+                <td th:text="${rental.carId}"></td>
+            </tr>
 
-<tr>
-    <th>Rent Date</th>
-    <td th:text="${rental.rentDate}"></td>
-</tr>
+            <tr>
+                <th>Rental Days</th>
+                <td th:text="${rental.days}"></td>
+            </tr>
 
-<tr>
-    <th>Return Date</th>
-    <td th:text="${rental.returnDate}"></td>
-</tr>
+            <tr>
+                <th>Total Amount</th>
+                <td class="amount">
+                    ₹ <span th:text="${rental.totalAmount}"></span>
+                </td>
+            </tr>
 
-</table>
+            <tr>
+                <th>Status</th>
+                <td class="status" th:text="${rental.status}"></td>
+            </tr>
 
-<br>
+            <tr>
+                <th>Rent Date</th>
+                <td th:text="${rental.rentDate}"></td>
+            </tr>
 
-<button onclick="window.print()">Print Receipt</button>
+            <tr>
+                <th>Return Date</th>
+                <td th:text="${rental.returnDate}"></td>
+            </tr>
 
-<br><br>
+        </table>
 
-<a href="/dashboard">Back to Dashboard</a>
+        <!-- Buttons -->
+        <div class="buttons">
+
+            <button class="btn print-btn" onclick="window.print()">
+                🖨️ Print Receipt
+            </button>
+
+            <a href="/dashboard" class="btn dashboard-btn">
+                🏠 Back to Dashboard
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Thank you for using Car Rental Management System
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -1,9 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Rental Management System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #172033, #34495e);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 18px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+        }
+
+        .icon {
+            font-size: 70px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 38px;
+            color: #172033;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #6c757d;
+            font-size: 17px;
+            margin-bottom: 35px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: #172033;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #2d3a52;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 45px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            width: 180px;
+            padding: 20px;
+            background: #f4f6f9;
+            border-radius: 10px;
+        }
+
+        .feature h3 {
+            font-size: 15px;
+            color: #172033;
+            margin-top: 10px;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Welcome to Car Rental Management System</h1>
+
+    <div class="container">
+
+        <div class="icon">🚗</div>
+
+        <h1>Car Rental Management System</h1>
+
+        <p>
+            Manage cars, customers and rentals easily with our
+            simple and efficient rental management system.
+        </p>
+
+        <a href="/login" class="btn">Login to Continue</a>
+
+        <div class="features">
+
+            <div class="feature">
+                <div class="feature-icon">🚘</div>
+                <h3>Car Management</h3>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">👥</div>
+                <h3>Customer Management</h3>
+            </div>
+
+            <div class="feature">
+                <div class="feature-icon">🔑</div>
+                <h3>Rental Management</h3>
+            </div>
+
+        </div>
+
+    </div>
+
 </body>
 </html>

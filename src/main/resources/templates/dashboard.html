@@ -1,30 +1,573 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - Car Rental Management System</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #111827;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ================= SIDEBAR ================= */
+
+        .sidebar {
+            width: 270px;
+            background: #111827;
+            color: white;
+            padding: 25px 18px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-left: 18px;
+            color: #ffffff;
+        }
+
+        .logo span {
+            color: #22b5ff;
+        }
+
+        .dashboard-link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-link:hover {
+            background: #1f2937;
+        }
+
+        .menu-section {
+            margin-top: 22px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            color: #9ca3af;
+            margin: 0 10px 10px;
+            letter-spacing: 1px;
+        }
+
+        .menu-section a {
+            display: block;
+            color: #f9fafb;
+            text-decoration: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin: 3px 0;
+            font-size: 15px;
+        }
+
+        .menu-section a:hover {
+            background: #1f2937;
+        }
+
+        /* LOGOUT */
+
+        .logout {
+            margin-top: 30px;
+            border-top: 1px solid #374151;
+            padding-top: 15px;
+        }
+
+        .logout a {
+            color: #ffb4b4;
+        }
+
+        .logout a:hover {
+            background: #7f1d1d;
+            color: white;
+        }
+
+        /* ================= MAIN CONTENT ================= */
+
+        .main {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            padding: 35px;
+        }
+
+        /* ================= HEADER ================= */
+
+        .welcome {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            margin-bottom: 25px;
+        }
+
+        .welcome h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* ================= CARDS ================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #4b5563;
+            margin-bottom: 12px;
+        }
+
+        .card h2 {
+            font-size: 27px;
+        }
+
+        /* ================= QUICK ACTIONS ================= */
+
+        .quick-actions {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        }
+
+        .quick-actions h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .action {
+            border: 1px solid #dbe1e8;
+            padding: 25px 15px;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            color: #111827;
+            font-weight: bold;
+            background: #fafafa;
+            transition: 0.2s;
+        }
+
+        .action:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .action-icon {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 900px) {
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                width: calc(100% - 220px);
+                padding: 20px;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<h1>Welcome Admin 🎉</h1>
+<div class="container">
 
-<h2>Car Rental Management System Dashboard</h2>
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
-<ul>
-    <li><a href="/addcar">Add Car</a></li>
-    <li><a href="/viewcars">View Cars</a></li>
-    <li><a href="/searchcar">Search Car</a></li>
-    <li><a href="/updatecar">Update Car</a></li>
-    <li><a href="/deletecar">Delete Car</a></li>
-    <li><a href="/addcustomer">Add Customer</a></li>
+    <aside class="sidebar">
 
-    <li><a href="/viewcustomers">View Customers</a></li>
+        <!-- LOGO -->
 
-    <li><a href="/rentcar">Rent Car</a></li>
-    <li><a href="/viewrentals">View Rentals</a></li>
-    <li><a href="/returncar">Return Car</a></li>
-    <li><a href="/receipt?rentalId=4">Print Receipt</a></li>
-    
-    </ul>
+        <div class="logo">
+            🚗 <span>CAR RENTAL</span>
+        </div>
 
-    </body>
+
+        <!-- DASHBOARD -->
+
+        <a href="/dashboard" class="dashboard-link">
+            🏠 Dashboard
+        </a>
+
+
+        <!-- =================================================
+             CARS
+        ================================================== -->
+
+        <div class="menu-section">
+
+            <div class="section-title">
+                CARS
+            </div>
+
+            <a href="/addcar">
+                ➕ Add Car
+            </a>
+
+            <a href="/viewcars">
+                🚘 View Cars
+            </a>
+
+            <a href="/searchcar">
+                🔍 Search Car
+            </a>
+
+            <a href="/updatecar">
+                ✏️ Update Car
+            </a>
+
+            <a href="/deletecar">
+                🗑️ Delete Car
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             CUSTOMERS
+        ================================================== -->
+
+        <div class="menu-section">
+
+            <div class="section-title">
+                CUSTOMERS
+            </div>
+
+            <a href="/addcustomer">
+                ➕ Add Customer
+            </a>
+
+            <a href="/viewcustomers">
+                👥 View Customers
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             RENTALS
+        ================================================== -->
+
+        <div class="menu-section">
+
+            <div class="section-title">
+                RENTALS
+            </div>
+
+            <a href="/rentcar">
+                🔑 Rent Car
+            </a>
+
+            <a href="/viewrentals">
+                📋 View Rentals
+            </a>
+
+            <a href="/returncar">
+                🔄 Return Car
+            </a>
+
+            <a href="/receipt?rentalId=1">
+                🧾 Receipt
+            </a>
+
+        </div>
+
+
+        <!-- =================================================
+             LOGOUT
+        ================================================== -->
+
+        <div class="menu-section logout">
+
+            <a href="/logout">
+                🚪 Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <h1>
+                Welcome Admin 🎉
+            </h1>
+
+            <p>
+                Car Rental Management System Dashboard
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             MANAGEMENT CARDS
+        ================================================== -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <div class="card-title">
+                    🚘 Car Management
+                </div>
+
+                <h2>
+                    Manage Cars
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    👥 Customer Management
+                </div>
+
+                <h2>
+                    Manage Customers
+                </h2>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-title">
+                    🔑 Rental Management
+                </div>
+
+                <h2>
+                    Manage Rentals
+                </h2>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             QUICK ACTIONS
+        ================================================== -->
+
+        <section class="quick-actions">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+            <div class="actions">
+
+
+                <!-- ADD CAR -->
+
+                <a href="/addcar" class="action">
+
+                    <span class="action-icon">
+                        🚘
+                    </span>
+
+                    Add Car
+
+                </a>
+
+
+                <!-- VIEW CARS -->
+
+                <a href="/viewcars" class="action">
+
+                    <span class="action-icon">
+                        🚗
+                    </span>
+
+                    View Cars
+
+                </a>
+
+
+                <!-- SEARCH CAR -->
+
+                <a href="/searchcar" class="action">
+
+                    <span class="action-icon">
+                        🔍
+                    </span>
+
+                    Search Car
+
+                </a>
+
+
+                <!-- ADD CUSTOMER -->
+
+                <a href="/addcustomer" class="action">
+
+                    <span class="action-icon">
+                        👤
+                    </span>
+
+                    Add Customer
+
+                </a>
+
+
+                <!-- VIEW CUSTOMERS -->
+
+                <a href="/viewcustomers" class="action">
+
+                    <span class="action-icon">
+                        👥
+                    </span>
+
+                    View Customers
+
+                </a>
+
+
+                <!-- RENT CAR -->
+
+                <a href="/rentcar" class="action">
+
+                    <span class="action-icon">
+                        🔑
+                    </span>
+
+                    Rent Car
+
+                </a>
+
+
+                <!-- VIEW RENTALS -->
+
+                <a href="/viewrentals" class="action">
+
+                    <span class="action-icon">
+                        📋
+                    </span>
+
+                    View Rentals
+
+                </a>
+
+
+                <!-- RETURN CAR -->
+
+                <a href="/returncar" class="action">
+
+                    <span class="action-icon">
+                        🔄
+                    </span>
+
+                    Return Car
+
+                </a>
+
+
+                <!-- RECEIPT -->
+
+                <a href="/receipt?rentalId=1" class="action">
+
+                    <span class="action-icon">
+                        🧾
+                    </span>
+
+                    Print Receipt
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+</body>
+
 </html>

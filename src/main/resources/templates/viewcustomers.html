@@ -1,63 +1,241 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
+    <title>View Customers - Car Rental</title>
 
-<title>View Customers</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
 
+        body {
+            background: #f4f6f9;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #1e293b;
+            color: white;
+            min-height: 100vh;
+            padding: 25px 15px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #94a3b8;
+            margin: 20px 10px 8px;
+            text-transform: uppercase;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 11px 12px;
+            margin: 4px 0;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #334155;
+            color: white;
+        }
+
+        .logout {
+            margin-top: 25px !important;
+            background: #dc2626;
+        }
+
+        .logout:hover {
+            background: #b91c1c !important;
+        }
+
+        /* Main Content */
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 40px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+        }
+
+        /* Table Card */
+        .table-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .table-card h2 {
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        th {
+            background: #1e293b;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:hover td {
+            background: #f8fafc;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                width: calc(100% - 200px);
+                padding: 25px;
+            }
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <!-- Sidebar -->
+    <div class="sidebar">
 
-<h2>Customer Details</h2>
+        <div class="logo">
+            🚗 CAR RENTAL
+        </div>
 
+        <a href="/">🏠 Dashboard</a>
 
-<table border="1">
+        <div class="menu-title">Cars</div>
 
+        <a href="/addcar">➕ Add Car</a>
+        <a href="/viewcars">🚘 View Cars</a>
+        <a href="/searchcar">🔍 Search Car</a>
+        <a href="/updatecar">✏️ Update Car</a>
+        <a href="/deletecar">🗑️ Delete Car</a>
 
-<tr>
+        <div class="menu-title">Customers</div>
 
-<th>ID</th>
-<th>Name</th>
-<th>Phone</th>
-<th>Email</th>
-<th>License</th>
+        <a href="/addcustomer">👤 Add Customer</a>
+        <a href="/viewcustomers" class="active">👥 View Customers</a>
 
-</tr>
+        <div class="menu-title">Rentals</div>
 
+        <a href="/rentcar">🔑 Rent Car</a>
+        <a href="/viewrentals">📋 View Rentals</a>
+        <a href="/returncar">↩️ Return Car</a>
+        <a href="/receipt?rentalId=4">🧾 Print Receipt</a>
 
+        <a href="/login" class="logout">🚪 Logout</a>
 
-<tr th:each="customer : ${customers}">
-
-
-<td th:text="${customer.id}"></td>
-
-<td th:text="${customer.name}"></td>
-
-<td th:text="${customer.phone}"></td>
-
-<td th:text="${customer.email}"></td>
-
-<td th:text="${customer.license}"></td>
-
-
-</tr>
+    </div>
 
 
-</table>
+    <!-- Main Content -->
+    <div class="main">
 
+        <div class="header">
+            <h1>👥 Customer Details</h1>
+            <p>View all registered customers in the rental system</p>
+        </div>
 
+        <div class="table-card">
 
-<br>
+            <h2>Customer List</h2>
 
-<a href="/dashboard">
-Back
-</a>
+            <table>
 
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>License</th>
+                </tr>
 
+                <tr th:each="customer : ${customers}">
+
+                    <td th:text="${customer.id}"></td>
+
+                    <td th:text="${customer.name}"></td>
+
+                    <td th:text="${customer.phone}"></td>
+
+                    <td th:text="${customer.email}"></td>
+
+                    <td th:text="${customer.license}"></td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <a href="/" class="back-btn">
+            ← Back to Dashboard
+        </a>
+
+    </div>
 
 </body>
-
 </html>
