@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Home - Car Rental</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 270px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: #111c31;
+            color: white;
+            padding: 25px 18px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #8d99ae;
+            margin: 22px 12px 10px;
+            font-weight: bold;
+        }
+
+        .menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 13px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .menu a:hover {
+            background: #34445f;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 18px;
+            right: 18px;
+        }
+
+        .logout a {
+            background: #dc3545;
+        }
+
+        .main {
+            margin-left: 270px;
+            padding: 45px;
+        }
+
+        .welcome {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            color: #172033;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: #172033;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        .icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main {
+                margin-left: 220px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <div class="logo">
+            🚗 CAR RENTAL
+        </div>
+
+        <div class="menu">
+
+            <a href="/customerhome">🏠 Customer Home</a>
+
+            <div class="menu-title">CARS</div>
+
+            <a href="/viewcars">🚘 Available Cars</a>
+            <a href="/searchcar">🔍 Search Cars</a>
+
+            <div class="menu-title">RENTALS</div>
+
+            <a href="/rentcar">🚗 Rent Car</a>
+            <a href="/receipt">🧾 Receipt</a>
+
+        </div>
+
+        <div class="logout">
+            <div class="menu">
+                <a href="/logout">🚪 Logout</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="main">
+
+        <div class="welcome">
+            <h1>Welcome Customer 👋</h1>
+            <p>Welcome to Car Rental Management System. Choose an option below to continue.</p>
+        </div>
+
+        <div class="cards">
+
+            <a href="/viewcars" class="card">
+                <div class="icon">🚘</div>
+                <h3>Available Cars</h3>
+                <p>View all available cars for rental.</p>
+            </a>
+
+            <a href="/searchcar" class="card">
+                <div class="icon">🔍</div>
+                <h3>Search Cars</h3>
+                <p>Search and find your preferred car.</p>
+            </a>
+
+            <a href="/rentcar" class="card">
+                <div class="icon">🚗</div>
+                <h3>Rent Car</h3>
+                <p>Rent a car for your required days.</p>
+            </a>
+
+            <a href="/receipt" class="card">
+                <div class="icon">🧾</div>
+                <h3>Receipt</h3>
+                <p>View your rental receipt.</p>
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
